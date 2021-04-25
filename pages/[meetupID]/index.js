@@ -1,33 +1,16 @@
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import Head from 'next/head';
 import MeetupDetail from '../../components/meetups/MeetupDetail';
 
-const DUMMY_MEETUPS = [
-  {
-    id: 'm1',
-    title: 'A First Meetup',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Stadtbild_M%C3%BCnchen.jpg/1600px-Stadtbild_M%C3%BCnchen.jpg',
-    address: 'Some address 5, 12345 Some City',
-    description: 'This is the first meetup',
-  },
-  {
-    id: 'm2',
-    title: 'A Second Meetup',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Stadtbild_M%C3%BCnchen.jpg/1600px-Stadtbild_M%C3%BCnchen.jpg',
-    address: 'Some address 5, 12345 Some City',
-    description: 'This is the second meetup',
-  },
-  {
-    id: 'm3',
-    title: 'A Third Meetup',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Stadtbild_M%C3%BCnchen.jpg/1600px-Stadtbild_M%C3%BCnchen.jpg',
-    address: 'Some address 5, 12345 Some City',
-    description: 'This is the thir meetup',
-  },
-]
-
 const DetailsPage = ({ currentMeetup }) => {
-  return <MeetupDetail meetup={currentMeetup} />;
+  return (
+    <>
+      <Head>
+        <title>{currentMeetup.title}</title>
+        <meta name="description" content={currentMeetup.description} />
+      </Head>
+      <MeetupDetail meetup={currentMeetup} />
+    </>
+  );
 };
 
 export const getStaticPaths = async () => {

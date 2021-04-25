@@ -35,7 +35,7 @@ const handler = async (req, res) => {
   const { method } = req;
   try {
     const client = await MongoClient.connect(
-      'mongodb+srv://admin-darwin:LLMc1JLYb6hN5dNr@cluster0.zixju.mongodb.net/meetups?retryWrites=true&w=majority',
+      `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.zixju.mongodb.net/meetups?retryWrites=true&w=majority`,
       {
         useNewUrlParser: true,
         useUnifiedTopology: true
