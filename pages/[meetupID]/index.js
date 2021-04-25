@@ -31,31 +31,20 @@ const DetailsPage = ({ currentMeetup }) => {
 };
 
 export const getStaticPaths = async () => {
+  const meetups = await (await fetch('http://localhost:3000/api/meetups')).json();
+  const paths = meetups.map((meetup) => ({
+    params: { meetupID: meetup._id },
+  }));
   return {
     fallback: false,
-    paths: [
-      {
-        params: {
-          meetupID: 'm1',
-        },
-      },
-      {
-        params: {
-          meetupID: 'm2',
-        },
-      },
-      {
-        params: {
-          meetupID: 'm3',
-        },
-      },
-    ]
+    paths,
   };
 };
 
 export const getStaticProps = async (context) => {
   const { meetupID } = context.params;
-  const foundMeetup = DUMMY_MEETUPS.find((meetup) => meetup.id === meetupID);
+  const response = await fetch(`http://localhost:3000/api/meetups?id=${meetupID}`);
+  const foundMeetup = await response.json();
   return {
     props: {
       currentMeetup: foundMeetup,

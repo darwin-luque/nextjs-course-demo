@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb'
+import { MongoClient, ObjectID } from 'mongodb'
 
 const methods = {};
 
@@ -20,6 +20,13 @@ methods.get = async (req, res, collection) => {
       res.status(201).json(meetups);
     } catch {
       res.status(502).json({ message: 'Could not get the meetups'});
+    }
+  } else {
+    const meetup = await collection.find({ _id: ObjectID(id) }).toArray();
+    if (meetup !== null) {
+      res.status(201).json(meetup[0]);
+    } else {
+      res.status(502).json({ message: 'Could not get the meetup with id ' + id});
     }
   }
 };
