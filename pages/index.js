@@ -35,6 +35,6 @@ export const getStaticProps = async () => {
     },
     revalidate: 1,
   };
-}
+};
 
 export default HomePage;

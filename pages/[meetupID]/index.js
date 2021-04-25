@@ -26,21 +26,41 @@ const DUMMY_MEETUPS = [
   },
 ]
 
-const DetailsPage = () => {
-  const [currentMeetup, setCurrentMeetup] = useState();
-  const router = useRouter();
-
-  useEffect(() => {
-    const { meetupID } = router.query;
-    if (meetupID !== undefined) {
-      const foundMeetup = DUMMY_MEETUPS.find((meetup) => meetup.id === meetupID);
-      setCurrentMeetup(foundMeetup);
-    }
-  }, [router]);
-
-  if (currentMeetup === undefined || currentMeetup === null) return null;
-
+const DetailsPage = ({ currentMeetup }) => {
   return <MeetupDetail meetup={currentMeetup} />;
+};
+
+export const getStaticPaths = async () => {
+  return {
+    fallback: false,
+    paths: [
+      {
+        params: {
+          meetupID: 'm1',
+        },
+      },
+      {
+        params: {
+          meetupID: 'm2',
+        },
+      },
+      {
+        params: {
+          meetupID: 'm3',
+        },
+      },
+    ]
+  };
+};
+
+export const getStaticProps = async (context) => {
+  const { meetupID } = context.params;
+  const foundMeetup = DUMMY_MEETUPS.find((meetup) => meetup.id === meetupID);
+  return {
+    props: {
+      currentMeetup: foundMeetup,
+    },
+  };
 };
 
 export default DetailsPage;
