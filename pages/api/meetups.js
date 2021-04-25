@@ -2,9 +2,9 @@ import { MongoClient } from 'mongodb'
 
 const methods = {};
 
-methods.post = async (body, collection, res) => {
+methods.post = async (req, res, collection) => {
   try {
-    const result = await collection.insertOne(body.data);
+    const result = await collection.insertOne(req.body.data);
     console.log(result);
     res.status(201).json({ message: 'Meetup succesfully created' });
   } catch {
@@ -12,11 +12,11 @@ methods.post = async (body, collection, res) => {
   }
 };
 
-methods.get = async (body, collection, res) => {
-  const getAll = typeof body.data.getAll === 'boolean' ? body.data.getAll : true;
-  if (getAll) {
+methods.get = async (req, res, collection) => {
+  let { id } = req.query;
+  if (!id) {
     try {
-      const meetups = collection.find().toArray();
+      const meetups = await collection.find().toArray();
       res.status(201).json(meetups);
     } catch {
       res.status(502).json({ message: 'Could not get the meetups'});
@@ -25,7 +25,7 @@ methods.get = async (body, collection, res) => {
 };
 
 const handler = async (req, res) => {
-  const { method, body } = req;
+  const { method } = req;
   try {
     const client = await MongoClient.connect(
       'mongodb+srv://admin-darwin:LLMc1JLYb6hN5dNr@cluster0.zixju.mongodb.net/meetups?retryWrites=true&w=majority',
@@ -36,7 +36,7 @@ const handler = async (req, res) => {
     );
     const db = client.db();
     const meetupCollection = db.collection('meetups');
-    await methods[method.trim().toLowerCase()](body, meetupCollection, res);
+    await methods[method.trim().toLowerCase()](req, res, meetupCollection);
     client.close();
   } catch {
     res.status(502).json({ message: 'Could not connect with the server' });
